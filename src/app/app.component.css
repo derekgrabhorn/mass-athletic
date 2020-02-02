@@ -1,0 +1,11 @@
+.nav {
+    text-align: center;
+}
+    a {
+    display: inline-block;
+    padding-right: 20px;
+}
+
+.active {
+    background-color:gainsboro;
+}

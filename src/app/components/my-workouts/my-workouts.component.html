@@ -1,0 +1,7 @@
+<button (click)="newWorkout($event)">New Workout</button>
+
+<div *ngFor="let workout of workouts">
+    {{workout.title}}
+    {{workout.description}}
+    {{workout.date}}
+</div>
