@@ -9,14 +9,14 @@ export class HomepageComponent implements OnInit {
 
   constructor() { }
 
+  user = {
+    firstName : "Derek",
+    lastName: "Grabhorn"
+  }
+
+  time = 1;
+
   ngOnInit() {
-    var user = {
-      firstName : "Derek",
-      lastName: "Grabhorn"
-    }
-
-    var time = 1;
-
   }
 
 }

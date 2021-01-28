@@ -10,7 +10,7 @@ export class MyWorkoutsService implements NewWorkoutService {
 s
   isLoggedIn;
 
-  constructor(private http: HttpClients) { }
+  constructor(private http: HttpClient) { }
 
   getWorkout() {
     const workout: newWorkout[] = [
