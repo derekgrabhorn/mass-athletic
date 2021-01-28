@@ -4,28 +4,19 @@ var mongo = require(`mongoose`);
 var route = express.Router();
 MongoClient = require('mongodb').MongoClient;
 const User = require('./models/user');
+require('dotenv').config();
 
 var app = express();
 
-var PORT = 3000;
-
-const CONNECTION_URL = 'mongodb+srv://derekAdmin:1234@cluster0-ldreq.mongodb.net/GeneralDB?retryWrites=true&w=majority';
-const DATABASE_NAME = "GeneralDB";
-const DATABASE_COLLECTION_WORKOUTS = "Workouts";
-const DATABASE_COLLECTION_USERS = "user";
-
-app.listen(PORT, () => {
-    MongoClient.connect(CONNECTION_URL, { useUnifiedTopology: true, useNewUrlParser: true }, (err, client) => {
+app.listen(process.env.PORT, () => {
+    MongoClient.connect(process.env.CONNECTION_URL, { useUnifiedTopology: true, useNewUrlParser: true }, (err, client) => {
         if(err) {
-            throw err;
+            console.log('error', err);
+        } else {
+        var db = client.db(process.env.DATABASE_NAME);
+        var collection = db.collection(process.env.DATABASE_COLLECTION_WORKOUTS);
+        console.log(`Listening at PORT ${process.env.PORT} and connected to: ` + process.env.DATABASE_NAME );
         }
-        db = client.db(DATABASE_NAME);
-        collection = db.collection(DATABASE_COLLECTION_WORKOUTS);
-        console.log(`Listening at PORT ${PORT} and connected to: ` + DATABASE_NAME );
-
-        // collection.insertOne(test, () => {
-        //     console.log('document inserted....');
-        // });
     });
 });
 
@@ -48,26 +39,52 @@ let test = new workoutSchema({
 });
 
 app.post('/api/user/login', (req, res) => {
-    MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
-        if (err) throw err;
-        db = client.db(DATABASE_NAME);
-        collection = db.collection(DATABASE_COLLECTION_USERS);
-        return collection.find({ username: req.body.username, password: req.body.password })
-            .toArray()
-            .then(result => {
-                if (result[0].username === req.body.username && result[0].password === req.body.password) {
-                    return res.status(200).json({
-                        status: 'success',
-                        data: result
-                    });
-                }
+    db = client.db(process.env.DATABASE_NAME);
+    collection = db.collection(process.env.DATABASE_COLLECTION_USERS);
+    return collection.find({ username: req.body.username, password: req.body.password })
+        .toArray()
+        .then(result => {
+            if (result[0].username === req.body.username && result[0].password === req.body.password) {
+                return res.status(200).json({
+                    status: 'success',
+                    data: result
+                });
+            }
+        })
+        .catch(err => res.status(200).json({
+            status: 'fail',
+            message: `'Login Failed', ${err}`
             })
-            .catch(err => res.status(200).json({
-                status: 'fail',
-                message: `'Login Failed', ${err}`
-                })
-            );
-    });
+        );
+});
+
+app.post('/api/user/stats', (req, res) => {
+    let col= req.body.collection;
+    if(col) {
+        col.aggregate([
+            {"$match":{"associated_user":req.body.username}},
+            {"$unwind":"exercise_1"},
+            {"$match":{"muscle_group":req.body.muscleGroup_1}},
+            {"$unwind":"set_1"},
+            {"$match":{"1rm":true}}
+
+        ])
+    }
+    return collection.find({ username: req.body.username,  })
+        .toArray()
+        .then(result => {
+            if (result[0].username === req.body.username && result[0].password === req.body.password) {
+                return res.status(200).json({
+                    status: 'success',
+                    data: result
+                });
+            }
+        })
+        .catch(err => res.status(200).json({
+            status: 'fail',
+            message: `'Login Failed', ${err}`
+            })
+        );
 });
 
 // var model = mongo.model('users', UsersSchema, 'users')

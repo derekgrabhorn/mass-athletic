@@ -1,6 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { AuthGuardService } from 'src/app/services/auth-guard.service';
+
 import { HomepageComponent } from 'src/app/components/homepage/homepage.component';
 import { MyWorkoutsComponent } from 'src/app/components/my-workouts/my-workouts.component';
 import { ExercisesComponent } from 'src/app/components/exercises/exercises.component';
@@ -14,22 +16,27 @@ const routes: Routes = [
     component: LoginPageComponent
   },
   { path: 'home',
-    component: HomepageComponent
+    component: HomepageComponent,
+    canActivate: [AuthGuardService]
   },
   { path: 'my-workouts', 
-    component: MyWorkoutsComponent 
+    component: MyWorkoutsComponent,
+    canActivate: [AuthGuardService] 
   },
   { path: 'exercises', 
-    component: ExercisesComponent 
+    component: ExercisesComponent,
+    canActivate: [AuthGuardService]
   },
   { path: 'settings', 
-    component: SettingsComponent 
+    component: SettingsComponent,
+    canActivate: [AuthGuardService] 
   },
   { path: 'stats',
-    component: StatsComponent
+    component: StatsComponent,
+    canActivate: [AuthGuardService]
   },
   { path: '**',  
-    component: ErrorPageComponent }
+    component: ErrorPageComponent}
 ];
 
 @NgModule({

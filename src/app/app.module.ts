@@ -13,6 +13,8 @@ import { ChartsModule } from 'ng2-charts';
 import { CommonService } from "src/app/services/common.service";
 import { NavComponent } from './components/nav/nav.component';
 import { StatsComponent } from './components/stats/stats.component';
+import { AuthenticationService } from './services/authentication.service';
+import { AuthGuardService } from './services/auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,11 @@ import { StatsComponent } from './components/stats/stats.component';
     ROUTING,
     ChartsModule
   ],
-  providers: [CommonService],
+  providers: [
+    CommonService,
+    AuthenticationService,
+    AuthGuardService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

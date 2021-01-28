@@ -7,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatsComponent implements OnInit {
 
-  constructor() { }
+  constructor() { 
+    
+  }
 
   public barChartOptions = {
     scaleShowVerticalLines: false,

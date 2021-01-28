@@ -3,6 +3,6 @@ export class User {
 		this.username = '';
 		this.password = '';
 	}
-	public username;
-	public password;
+	public username: string;
+	public password: string;
 }
