@@ -1,3 +1,8 @@
 body {
     padding-top: 55px;
 }
+
+.button {
+    display: block;
+    margin: auto;
+}

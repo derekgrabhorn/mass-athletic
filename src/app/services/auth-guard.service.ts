@@ -15,7 +15,7 @@ export class AuthGuardService implements CanActivate {
     if (this.authenticate.isUserLoggedIn()) {
       return true;
     } else {
-      alert('You must login before accessing the application');
+      // alert('You must login before accessing the application');
       this.router.navigate([''], { queryParams: { returnUrl: route.url  }});
       return false;
     }
