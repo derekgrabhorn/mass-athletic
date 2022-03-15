@@ -16,7 +16,7 @@ export class AuthenticationService {
   constructor(private http: HttpClient,
               private router: Router,
               private cookieService: CookieService){
-    this.isLoggedIn = false;
+    this.cookieService.set('authenticated', 'false');
   }
 
   validateLogin(user: User) {
@@ -25,7 +25,7 @@ export class AuthenticationService {
       password: user.password
     }).subscribe(result => {
       if(result['status'] === 'success') {
-        this.isLoggedIn = true;
+        this.cookieService.set('authenticated', 'true');
         this.cookieService.set('userId', result['userId']);
         this.router.navigate(['/home']);
       } else { alert('Wrong username password'); }
@@ -33,18 +33,15 @@ export class AuthenticationService {
   }
   
   isUserLoggedIn(): boolean {
-    return this.isLoggedIn;
+    return this.cookieService.get('authenticated') === 'true' ? true : false;
   }
 
   isAdminUser(): boolean {
-    if(this.userName == 'Admin') {
-      return true;
-    }
-    return false;
+    return this.userName == 'Admin' ? true : false;
   }
-
+  
   logoutUser(): void {
-    this.isLoggedIn = false;
+    this.cookieService.set('authenticated', 'false');
   }
 
 }
