@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormsModule } from "@angular/forms";
-import { CommonService } from "./services/common.service";
 
-import { Http, Response, Headers, RequestOptions } from "@angular/http";
+import { CommonService } from "./services/common.service";
 
 @Component({
   selector: 'app-root',
@@ -20,18 +18,18 @@ export class AppComponent {
     name;
 
     ngOnInit() {
-    this.newService.GetUser().subscribe(data => this.Repdata = data)
+    // this.newService.GetUser().subscribe(data => this.Repdata = data)
   }
 
-  onSave = (user, isValid: boolean) => {
-    user.mode = this.valbutton;
-    this.newService.saveUser(user)
-    .subscribe(data => {alert(data.data);
+  // onSave = (user, isValid: boolean) => {
+  //   user.mode = this.valbutton;
+  //   this.newService.saveUser(user)
+  //   .subscribe(data => {alert(data.data);
     
-    this.ngOnInit();
-  }
-  , error => this.errorMessage = error )
-  }
+  //   this.ngOnInit();
+  // }
+  // , error => this.errorMessage = error )
+  // }
 
   edit = (kk) => {
     this.id = kk._id;

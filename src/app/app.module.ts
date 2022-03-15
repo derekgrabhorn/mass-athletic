@@ -8,20 +8,23 @@ import { FormsModule } from "@angular/forms";
 
 import { AppRoutingModule, routingComponents, ROUTING } from 'src/app/app-routing.module';
 import { AppComponent } from 'src/app/app.component';
-import { ChartsModule } from 'ng2-charts';
+import { ChartsModule, ThemeService } from 'ng2-charts';
 
 import { CommonService } from "src/app/services/common.service";
 import { NavComponent } from './components/nav/nav.component';
-import { StatsComponent } from './components/stats/stats.component';
 import { AuthenticationService } from './services/authentication.service';
 import { AuthGuardService } from './services/auth-guard.service';
+import { CookieService } from 'ngx-cookie-service';
+import { SecondsDhmsPipe } from './pipes/seconds-dhms.pipe';
+import { NewWorkoutComponent } from './components/new-workout/new-workout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     routingComponents,
     NavComponent,
-    StatsComponent,
+    SecondsDhmsPipe,
+    NewWorkoutComponent,
   ],
   imports: [
     RouterModule,
@@ -34,6 +37,8 @@ import { AuthGuardService } from './services/auth-guard.service';
     ChartsModule
   ],
   providers: [
+    ThemeService,
+    CookieService,
     CommonService,
     AuthenticationService,
     AuthGuardService

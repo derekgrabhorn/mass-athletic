@@ -7,10 +7,19 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "module": "esnext",
+    "module": "commonjs",
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
+    "paths": {
+      "@server": [
+        "server/server"
+      ],
+      "@environment": [
+        "server/environments/environment"
+      ]
+    },
     "typeRoots": [
       "node_modules/@types"
     ],

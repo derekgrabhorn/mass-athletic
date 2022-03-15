@@ -9,7 +9,7 @@ import { ExercisesComponent } from 'src/app/components/exercises/exercises.compo
 import { SettingsComponent } from 'src/app/components/settings/settings.component';
 import { ErrorPageComponent } from 'src/app/components/error-page/error-page.component';
 import { LoginPageComponent } from 'src/app/components/login-page/login-page.component';
-import { StatsComponent } from 'src/app/components/stats/stats.component'
+import { NewWorkoutComponent } from './components/new-workout/new-workout.component';
 
 const routes: Routes = [
   { path: '',
@@ -31,8 +31,9 @@ const routes: Routes = [
     component: SettingsComponent,
     canActivate: [AuthGuardService] 
   },
-  { path: 'stats',
-    component: StatsComponent,
+  {
+    path: 'new-workout',
+    component: NewWorkoutComponent,
     canActivate: [AuthGuardService]
   },
   { path: '**',  
@@ -55,6 +56,5 @@ export const routingComponents = [
   ExercisesComponent,
   SettingsComponent,
   ErrorPageComponent,
-  LoginPageComponent,
-  StatsComponent
+  LoginPageComponent
 ]
