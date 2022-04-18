@@ -1,0 +1,83 @@
+<br><button class="button is-success" [routerLink]="['/new-workout']">New Workout</button><br><br>
+<div class="columns is-marginless is-vcentered">
+    <div class="column is-one-quarter">
+        <article class="tile box is-child">
+            <div class="heading">Total Workouts</div>
+            <div class="title">{{totalWorkouts}}</div>
+            <div class="heading">Workouts Per Week - Last 3 Months</div>
+            <div class="title">{{workoutsPerWeek | number : '1.0-1' }}</div>
+        </article>
+    </div>
+    <div class="column is-one-quarter">
+        <article class="tile box is-child">
+            <div class="heading">Total Workout Time</div>
+            <div class="title">{{totalWorkoutDuration | secondsToDHMS }}</div>
+            <div class="heading">Average Workout Duration</div>
+            <div class="title">{{averageWorkoutDuration | secondsToDHMS }}</div>
+        </article>
+    </div>
+    <div class="column is-half">
+        <article class="tile is-child box">
+            <table class="table is-striped is-hoverable is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>Exercise</th>
+                        <th>1RM</th>
+                        <th>Occurred</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Bench Press</td>
+                        <td>{{bpWeight}}</td>
+                        <td>{{bpDate | date: 'MMM d' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Squat</td>
+                        <td>{{sqWeight}}</td>
+                        <td>{{sqDate | date: 'MMM d' }}</td>
+                    </tr>
+                    <tr>
+                        <td>Deadlift</td>
+                        <td>{{dlWeight}}</td>
+                        <td>{{dlDate | date: 'MMM d' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+    </div>
+</div>
+
+<div class="columns is-multiline is-marginless">
+    <div class="column is-6">
+      <article class="message is-dark">
+        <div class="message-header">
+          <p>One Rep Max History</p>
+        </div>
+        <div class="message-body">
+            <canvas baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartType">
+            </canvas>
+        </div>
+      </article>
+    </div>
+    <div class="column is-6">
+      <article class="message is-dark">
+        <div class="message-header">
+          <p>Muscle Groups by Use</p>
+        </div>
+        <div class="message-body">
+            <canvas *ngIf="donutChartData" baseChart
+            [data]="donutChartData"
+            [labels]="donutChartLabels"
+            [chartType]="donutChartType"
+            [colors]="donutChartColors">
+            </canvas>
+        </div>
+      </article>
+    </div>
+</div>
