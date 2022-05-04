@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 
 import { Workout } from 'ui/models/interfaces';
-import { MuscleGroups } from 'ui/models/enums';
 import { Observable } from 'rxjs';
 
 @Injectable({

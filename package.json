@@ -10,5 +10,7 @@
     "e2e": "ng e2e",
     "starting": "nodemon --exec babel-node ../index.js"
   },
-  "private": true
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {}
 }
