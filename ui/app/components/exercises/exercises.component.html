@@ -1,0 +1,11 @@
+<div class="columns is-marginless is-vcentered">
+    <div *ngIf="exerciseList" class="column is-half" style="margin: auto;">
+        <div *ngFor="let exercise of exerciseList" class="box">
+            <div>
+                {{ exercise.name }}
+            </div>
+            Muscle Group: {{exercise.muscleGroup}}<br>
+            Primary Muscle: {{exercise.primaryMuscle}}<br>
+            Secondary {{ (exercise.secondaryMuscle.length > 1) ? 'Muscles' : 'Muscle' }}: {{exercise.secondaryMuscle}}<br>
+        </div>
+</div>
