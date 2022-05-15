@@ -15,4 +15,8 @@ router.post('/getAll', (req: Request, res: Response) => {
     return stats.getAll(req, res, db.workoutCollection);
 });
 
+router.post('/getExercises', (req: Request, res: Response) => {
+    return stats.getExercises(req, res, db.exercisesCollection);
+});
+
 export default router;

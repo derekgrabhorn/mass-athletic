@@ -10,6 +10,7 @@ export class Database {
     private database;
     public workoutCollection;
     public usersCollection;
+    public exercisesCollection;
 
     static getInstance(): Database {
         if (!this.instance) {
@@ -27,6 +28,7 @@ export class Database {
                 this.database = client.db(process.env.DATABASE_NAME);
                 this.workoutCollection = this.database.collection(process.env.DATABASE_COLLECTION_WORKOUTS);
                 this.usersCollection = this.database.collection(process.env.DATABASE_COLLECTION_USERS);
+                this.exercisesCollection = this.database.collection(process.env.DATABASE_COLLECTION_EXERCISES);
                 console.log(`Connected to: ` + process.env.DATABASE_NAME );
             }
         });

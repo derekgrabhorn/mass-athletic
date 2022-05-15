@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { User } from 'ui/models/user.model';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
+import { NavService } from './nav.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient,
               private router: Router,
-              private cookieService: CookieService){
+              private cookieService: CookieService,
+              public navService: NavService){
     this.cookieService.set('authenticated', 'false');
   }
 
@@ -27,6 +29,7 @@ export class AuthenticationService {
       if(result['status'] === 'success') {
         this.cookieService.set('authenticated', 'true');
         this.cookieService.set('userId', result['userId']);
+        this.navService.show();
         this.router.navigate(['/home']);
       } else { alert('Wrong username password'); }
     }, err => { console.log('error is: ', err) });

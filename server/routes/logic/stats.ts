@@ -187,6 +187,16 @@ export class Statistics {
                 })
             );
     }
+
+    getExercises(req, res, collection) {
+        collection.find({}).toArray((err, result) => {
+            if (err) {
+                console.log(`Error returning exercises: ${err}`);
+            } else {
+                return res.status(200).json(result);
+            }
+        })
+    }
 }
 
 export default Statistics;

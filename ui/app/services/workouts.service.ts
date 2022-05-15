@@ -17,13 +17,10 @@ export class WorkoutsService {
               private cookieService: CookieService          
   ) {}
 
-  writeWorkout(workout: Workout) {
+  saveNewWorkout(workout: Workout) {
     return this.http.post('/api/user/addWorkout', {
       ...workout
-    }).subscribe(result => {
-      if(result['status'] === 'success') {
-      }
-    })
+    });
   }
 
   getAllWorkouts(): Observable<any> {
@@ -37,5 +34,9 @@ export class WorkoutsService {
       userId: this.cookieService.get('userId'),
       ormTimeframe: pastNineMonths
     })
+  }
+
+  getAllExercises() {
+    return this.http.post('/api/stats/getExercises', {});
   }
 }

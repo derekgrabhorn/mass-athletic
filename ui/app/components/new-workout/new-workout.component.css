@@ -1,0 +1,33 @@
+@import "../../../node_modules/boxicons/css/boxicons.css";
+
+#workout-header {
+    margin: auto;
+    display: block;
+    width: 200px;
+}
+
+#footer-buttons {
+    display: block;
+    margin: auto;
+    width: 337px;
+}
+
+#add-exercise-button {
+    margin-left: 20px;
+}
+
+#complete-exercise-button {
+    margin-left: 20px;
+}
+
+.set-align-left {
+    float: left;
+}
+
+.set-align-right {
+    float: right;
+}
+
+#new-modal-body {
+    min-height: 250px;
+}

@@ -1,6 +1,7 @@
 import { Muscle, MuscleGroups } from './enums'
 
 export interface Workout {
+    status?: string;
     userId: string;
     name: string;
     start: Date;
@@ -10,6 +11,7 @@ export interface Workout {
 }
 
 export interface Exercise {
+    active?: boolean;
     name: string;
     muscleGroup: MuscleGroups;
     primaryMuscle: Muscle;
@@ -17,7 +19,16 @@ export interface Exercise {
     sets: Set[];
 }
 
+export interface DefaultExercise {
+    name: string;
+    muscleGroup: MuscleGroups;
+    primaryMuscle: Muscle;
+    secondaryMuscle: Muscle[];
+}
+
 export interface Set {
+    status?: string;
+    number?: number;
     reps: number;
     weight: number;
     oneRepMax: boolean;

@@ -21,4 +21,8 @@ router.post('/getWorkouts', (req: Request, res: Response) => {
     return workouts.getWorkouts(req, res, db.workoutCollection);
 });
 
+router.post('/addWorkout', (req: Request, res: Response) => {
+    return workouts.addWorkout(req, res, db.workoutCollection);
+})
+
 export default router;

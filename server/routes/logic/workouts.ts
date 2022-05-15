@@ -1,7 +1,6 @@
 export class WorkoutsLogic {
 
-    addWorkout(req, res, collection, db) {
-        collection = db.collection(process.env.DATABASE_COLLECTION_WORKOUTS);
+    addWorkout(req, res, collection) {
         collection.insertOne(req.body)
         .then((result) => {
             return res.status(200).json({

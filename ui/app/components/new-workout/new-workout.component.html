@@ -1,26 +1,87 @@
-{{workoutTimer}}
-
-<div class="card">
+<div id="workout-header">
+  <div *ngIf="workout.status==='editing-name'">
+    <input [(ngModel)]="setWorkoutNameInput" type="text"> <a (click)="saveWorkoutName()" class="bx bx-check-square bx-sm"></a>
+  </div>
+  <div *ngIf="workout.status==='inactive'">
+    {{workout.name}} <a (click)="editWorkoutName()" class="bx bx-edit-alt bx-sm"></a>
+  </div>
+  <br>
+  <span>
+    <i class='bx bx-time-five bx-sm'></i> {{workoutTimer}}
+  </span>
+</div>
+<br>
+<div *ngFor="let exercise of workout.exercises" class="card">
     <header class="card-header">
       <p class="card-header-title">
-        Bench Press
+        {{exercise.name}}
       </p>
-      <button class="card-header-icon" aria-label="more options">
-        <span class="icon">
-          <i class="fas fa-angle-down" aria-hidden="true"></i>
-        </span>
-      </button>
+      <a (click)="changeActiveStatus(exercise)" class="card-toggle card-header-icon">
+        <i class="fa fa-angle-down"></i>
+      </a>
     </header>
-    <div class="card-content">
-      <div class="content">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
-        <a href="#">@bulmaio</a>. <a href="#">#css</a> <a href="#">#responsive</a>
-        <br>
-        <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+    <div class="card-content" [class.is-hidden]="!exercise.active">
+      <div class="content" *ngFor="let set of exercise.sets">
+        Set {{set.number}}: {{set.reps}} reps at {{set.weight}} pounds
       </div>
-    </div>
     <footer class="card-footer">
-      <a href="#" class="card-footer-item">Add Set</a>
-      <a href="#" class="card-footer-item">Delete Exercise</a>
+      <div class="card-footer-item" (click)="addSet(exercise)">Edit</div>
+      <div class="card-footer-item" (click)="deleteExercise(exercise)">Delete</div>
     </footer>
   </div>
+</div>
+<br>
+<div id="footer-buttons">
+    <button id="add-exercise-button" class="button is-success" (click)="addExercise()">Add Exercise</button>
+    <button id="complete-exercise-button" class="button is-info" (click)="saveWorkout()">Complete Workout</button>
+</div>
+
+<div class="modal" [class.is-active]="isNewExercise">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">New Exercise: {{newExercise?.name}}</p>
+      <button class="delete" aria-label="close" (click)="closeNewExerciseModal()"></button>
+    </header>
+    <section id="new-modal-body" class="modal-card-body">
+      <div class="dropdown" [class.is-active]="isDropdownActive" (click)="changeDropdownStatus()">
+        <div class="dropdown-trigger">
+          <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+            <span>{{newExercise?.name || 'Select Exercise'}}</span>
+            <span class="icon is-small">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+            </span>
+          </button>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+            <a (click)="setNewExercise(defaultExercise)" *ngFor="let defaultExercise of masterExerciseList" class="dropdown-item">
+              {{defaultExercise.name}}
+            </a>
+          </div>
+        </div>
+      </div>
+      <button style="float: right;"class="button is-success" (click)="addNewSet()">Add Set</button><br><br>
+      <div *ngFor="let set of newExercise?.sets; let i = index">
+        Set {{i+1}}: 
+        <span *ngIf="set.status==='inactive'">{{set.reps}} reps at {{set.weight}}</span>
+        <span *ngIf="set.status==='active'">
+          <input [(ngModel)]="setRepsInput" type="number"> reps at 
+          <input [(ngModel)]="setWeightInput" type="number">
+        </span>
+        <span *ngIf="set.status==='inactive'">
+          <a (click)="deleteSet(set)" class='bx bx-checkbox-minus bx-sm set-align-right'></a>
+          <a (click)="editSet(set)" class='bx bxs-edit bx-sm set-align-right'></a>
+        </span>
+        <span *ngIf="set.status==='active'">
+          <a (click)="cancelSetEdit(set)" class='bx bxs-x-square bx-sm set-align-right'></a>
+          <a (click)="saveSet(set)" class='bx bx-check-square bx-sm set-align-right'></a>
+        </span>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success" (click)="saveNewExercise()">Save</button>
+      <button class="button" (click)="closeNewExerciseModal()">Cancel</button>
+    </footer>
+  </div>
+</div>

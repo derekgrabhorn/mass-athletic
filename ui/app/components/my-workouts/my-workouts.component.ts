@@ -67,7 +67,6 @@ export class MyWorkoutsComponent implements OnInit {
 
   activate(thisWorkout: any) {
     thisWorkout.status = !thisWorkout.status;
-    console.log(thisWorkout, 'in fn');
     this.activeExercise = undefined;
     this.activeContent = thisWorkout;
     //this.activeContent.exercises = Object.keys(thisWorkout.exercises);

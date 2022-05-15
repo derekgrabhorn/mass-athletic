@@ -2,7 +2,7 @@
     <div *ngIf="workoutsArray" class="column is-one-quarter">
         <div *ngFor="let workout of workoutsArray" class="box" (click)="activate(workout)" [class.has-background-primary]="workout===activeContent">
             <div>
-                {{ workout.name }} - {{ workout.date | date: 'MMM d' }}
+                {{ workout.name }} - {{ workout.end | date: 'MMM d' }}
             </div>
         </div>
 </div>
