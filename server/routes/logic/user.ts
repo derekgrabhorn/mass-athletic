@@ -49,7 +49,7 @@ export class UserLogic {
 
                 res.status(200).json({
                     status: 'success',
-                    userId: response['ops'][0]._id
+                    userId: response['ops']._id
                 })
             }
         } catch (err) {
@@ -64,7 +64,7 @@ export class UserLogic {
     async doesUserExist(username, collection): Promise<boolean> {
         try {
             const result = await collection.findOne({ username: username });
-            return (result && result[0]);
+            return Boolean(result);
         } catch (err) {
             console.log(err);
             throw new Error('Failed user existence validation.');
@@ -73,15 +73,14 @@ export class UserLogic {
 
     login(req, res, collection) {
         return collection.findOne({ username: req.body.username })
-            .toArray()
             .then(result => {
-                this.validatePassword(req.body.password, result[0].password, result[0].salt).then((isPasswordValid) => {
+                this.validatePassword(req.body.password, result.password, result.salt).then((isPasswordValid) => {
                     if (isPasswordValid) {
                         return res.status(200).json({
                             status: 'success',
-                            userId: result[0]._id,
-                            firstName: result[0].first_name,
-                            lastName: result[0].last_name
+                            userId: result._id,
+                            firstName: result.first_name,
+                            lastName: result.last_name
                         });
                     } else {
                         return res.status(200).json({
@@ -106,9 +105,9 @@ export class UserLogic {
             .then(result => {
                 return res.status(200).json({
                     status: 'success',
-                    firstName: result[0].first_name,
-                    lastName: result[0].last_name,
-                    systemUsed: result[0].measurement_system
+                    firstName: result.first_name,
+                    lastName: result.last_name,
+                    systemUsed: result.measurement_system
                 });
             }) 
         } catch (err) {

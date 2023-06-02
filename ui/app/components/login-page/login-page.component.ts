@@ -13,7 +13,7 @@ import { User } from 'ui/models/user.model';
 export class LoginPageComponent implements OnInit {
 
   public user: User;
-  private errorResponse: string = null;
+  public errorResponse: string = null;
 
   constructor(
     private authenticate: AuthenticationService, 
