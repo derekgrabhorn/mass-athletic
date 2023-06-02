@@ -43,7 +43,7 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-export const ROUTING: ModuleWithProviders = RouterModule.forRoot(routes);
+export const ROUTING: ModuleWithProviders<AppRoutingModule> = RouterModule.forRoot(routes);
 
 export const routingComponents = [
   HomepageComponent,
