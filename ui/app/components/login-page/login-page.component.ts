@@ -13,13 +13,32 @@ import { User } from 'ui/models/user.model';
 export class LoginPageComponent implements OnInit {
 
   public user: User;
+  private errorResponse: string = null;
 
-  constructor(private authenticate: AuthenticationService, private router: Router) {
+  constructor(
+    private authenticate: AuthenticationService, 
+    private router: Router) {
     this.user = new User();
   }
 
-  validateLogin() {
-      this.authenticate.validateLogin(this.user);
+  async accountAction(actionType: string) {
+    let endpoint = (
+      actionType == 'login' ? '/api/user/login':
+      actionType == 'create' ? '/api/user/create':
+      null
+    )
+    try {
+      const result = await this.authenticate.createAndLogin(this.user, endpoint);
+      if (result !== 'success') {
+        this.errorResponse = result;
+      }
+    } catch (err) {
+      this.errorResponse = err;
+    }
+  }
+
+  closeError() {
+    this.errorResponse = null;
   }
   
   ngOnInit() {

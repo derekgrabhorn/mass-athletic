@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { CommonService } from "./services/common.service";
+import { UserService } from "./services/user.service";
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import { CommonService } from "./services/common.service";
 export class AppComponent {
   title = 'mass-athletic';
 
-  constructor(private newService: CommonService ) {}
+  constructor(private newService: UserService) { }
     Repdata;
     valbutton = 'Save';
     errorMessage;

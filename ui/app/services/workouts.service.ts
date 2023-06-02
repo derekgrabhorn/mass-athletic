@@ -13,9 +13,9 @@ export class WorkoutsService {
 
   isLoggedIn;
 
-  constructor(private http: HttpClient,
-              private cookieService: CookieService          
-  ) {}
+  constructor(
+    private http: HttpClient,
+    private cookieService: CookieService) { }
 
   saveNewWorkout(workout: Workout) {
     return this.http.post('/api/user/addWorkout', {

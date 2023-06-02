@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "ng": "ng",
-    "start": "(cd ui && ng serve --proxy-config proxy.json) & (cd server && nodemon ./server.ts)",
+    "start": "(cd ui && ng serve --proxy-config proxy.json) & (npx nodemon)",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -11,6 +11,10 @@
     "starting": "nodemon --exec babel-node ../index.js"
   },
   "private": true,
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "esbuild-register": "^3.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }

@@ -1,5 +1,15 @@
 <div class="navbar-buffer"></div>
 <div class="container small">
+  <article *ngIf="errorResponse" class="message is-danger">
+    <div class="message-header">
+      <p>Error</p>
+      <button class="delete" aria-label="delete" (click)="closeError()"></button>
+    </div>
+    <div class="message-body">
+      {{ errorResponse }}
+    </div>
+  </article>
+
   <div class="field">
     <label class="label">Email</label>
     <div class="control">
@@ -13,5 +23,6 @@
       <input id="inputPassword" class="input" type="password" name="password" [(ngModel)] = "user.password" required>
     </div>
   </div>
-  <button class="button" (click)="validateLogin()" type="button">Sign in</button>
+  <button class="button" (click)="accountAction('login')" type="button">Sign in</button>
+  <button class="button is-pulled-right" (click)="accountAction('create')" type="button">Create Account</button>
 </div>

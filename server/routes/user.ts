@@ -17,6 +17,14 @@ router.post('/login', (req: Request, res: Response) => {
     return user.login(req, res, db.usersCollection);
 });
 
+router.post('/create', (req: Request, res: Response) => {
+    return user.create(req, res, db.usersCollection);
+});
+
+router.post('/getProfile', (req: Request, res: Response) => {
+    return user.getUserData(req, res, db.usersCollection);
+});
+
 router.post('/getWorkouts', (req: Request, res: Response) => {
     return workouts.getWorkouts(req, res, db.workoutCollection);
 });

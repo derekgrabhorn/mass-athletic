@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { WorkoutsService } from 'ui/app/services/workouts.service';
 import { ChartType } from 'chart.js';
 import { Label, SingleDataSet } from 'ng2-charts';
+import { NavService } from 'ui/app/services/nav.service';
+import { UserService } from 'ui/app/services/user.service';
 
 @Component({
   selector: 'app-homepage',
@@ -45,8 +47,13 @@ export class HomepageComponent implements OnInit {
   dlWeight: number;
   dlDate: Date;
 
-  constructor(private workoutsService: WorkoutsService) {
-  }
+  public isEditingSettings: boolean = true;
+  private userInformation: any = {};
+
+  constructor(
+    private workoutsService: WorkoutsService,
+    public navService: NavService,
+    public UserService: UserService) { }
 
   ngOnInit() {
     let ORMMonths = this.getTimeframe(8);
@@ -104,4 +111,7 @@ export class HomepageComponent implements OnInit {
 
   }
 
+  closeSettings() {
+    this.navService.isSettingsAccessed = false;
+  }
 }
