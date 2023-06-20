@@ -1,5 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 import { AuthGuardService } from 'ui/app/services/auth-guard.service';
 
@@ -37,6 +38,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    FormsModule,
     RouterModule.forRoot(routes),
     RouterModule],
   exports: [RouterModule]

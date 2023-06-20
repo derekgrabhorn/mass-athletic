@@ -4,6 +4,7 @@ import { ChartType } from 'chart.js';
 import { Label, SingleDataSet } from 'ng2-charts';
 import { NavService } from 'ui/app/services/nav.service';
 import { UserService } from 'ui/app/services/user.service';
+import { DataService } from 'ui/app/services/data.service';
 
 @Component({
   selector: 'app-homepage',
@@ -40,12 +41,9 @@ export class HomepageComponent implements OnInit {
   totalWorkoutDuration: number;
   averageWorkoutDuration: number;
 
-  bpWeight: number;
-  bpDate: Date;
-  sqWeight: number;
-  sqDate: Date;
-  dlWeight: number;
-  dlDate: Date;
+  ormWorkouts = ['Bench Press', 'Squat', 'Deadlift'];
+  ormWeights = {}
+  ormDates = {}
 
   public isEditingSettings: boolean = true;
   private userInformation: any = {};
@@ -53,7 +51,8 @@ export class HomepageComponent implements OnInit {
   constructor(
     private workoutsService: WorkoutsService,
     public navService: NavService,
-    public UserService: UserService) { }
+    public UserService: UserService,
+    public dataService: DataService) { }
 
   ngOnInit() {
     let ORMMonths = this.getTimeframe(8);
@@ -61,33 +60,32 @@ export class HomepageComponent implements OnInit {
     this.workoutsService.getStats(ORMMonths).subscribe((result) => {
       this.totalWorkouts = result['total'];
 
-      for(let i in result['groupsByUse']) {
-        this.donutChartLabels.push(i);
-        this.donutChartData.push(result['groupsByUse'][i]);
+      this.dataService.saveMuscleGroups(result['muscleGroups']);
+      this.dataService.saveMuscleNames(result['muscleNames']);
+
+      for(let i in result['muscleGroups']) {
+        this.donutChartLabels.push(result['muscleGroups'][i]);
+        let workoutsForThisGroup = result['groupsByUse'][result['muscleGroups'][i]] ?? 0;
+        this.donutChartData.push(workoutsForThisGroup);
       }
 
       //Set ORM data
-      this.bpWeight = result['maxBench'].BP_ORM_Weight;
-      this.bpDate = result['maxBench'].BP_ORM_Date;
-
-      this.sqWeight = result['maxSquat'].SQ_ORM_Weight;
-      this.sqDate = result['maxSquat'].SQ_ORM_Date;
-
-      this.dlWeight = result['maxDeadlift'].DL_ORM_Weight;
-      this.dlDate = result['maxDeadlift'].DL_ORM_Date;
+      this.ormWorkouts.forEach((workout) => {
+        this.ormWeights[workout] = result['oneRepMax'][workout]['ORM_Weight'];
+        this.ormDates[workout] = result['oneRepMax'][workout]['ORM_Date'];
+      });
 
       //Set averages and totals
       this.totalWorkoutDuration = result['totalTime'];
       this.averageWorkoutDuration = result['averageDuration'];
       this.workoutsPerWeek = result['workoutsPerWeek'];
 
-      let ormKeys = Object.keys(result['maxBench'].BP_ORM_History);
-
+      let ormKeys = Object.keys(result['oneRepMax']['Bench Press']['ORM_History']);
       //Set ORM Histories
       for (let i=0; i < ormKeys.length; i++) {
-        this.benchMaxData[i] = result['maxBench'].BP_ORM_History[ormKeys[i]];
-        this.squatMaxData[i] = result['maxSquat'].SQ_ORM_History[ormKeys[i]];
-        this.deadliftMaxData[i] = result['maxDeadlift'].DL_ORM_History[ormKeys[i]];
+        this.benchMaxData[i] = result['oneRepMax']['Bench Press']['ORM_History'][ormKeys[i]];
+        this.squatMaxData[i] = result['oneRepMax']['Squat']['ORM_History'][ormKeys[i]];
+        this.deadliftMaxData[i] = result['oneRepMax']['Deadlift']['ORM_History'][ormKeys[i]];
       }
     })
   }

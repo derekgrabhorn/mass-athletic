@@ -25,21 +25,11 @@
                         <th>Occurred</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody *ngFor="let item of ormWorkouts">
                     <tr>
-                        <td>Bench Press</td>
-                        <td>{{bpWeight}}</td>
-                        <td>{{bpDate | date: 'MMM d' }}</td>
-                    </tr>
-                    <tr>
-                        <td>Squat</td>
-                        <td>{{sqWeight}}</td>
-                        <td>{{sqDate | date: 'MMM d' }}</td>
-                    </tr>
-                    <tr>
-                        <td>Deadlift</td>
-                        <td>{{dlWeight}}</td>
-                        <td>{{dlDate | date: 'MMM d' }}</td>
+                        <td>{{item}}</td>
+                        <td>{{ormWeights[item]}}</td>
+                        <td>{{ormDates[item] | date: 'MMM d' }}</td>
                     </tr>
                 </tbody>
             </table>

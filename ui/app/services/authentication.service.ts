@@ -22,7 +22,18 @@ export class AuthenticationService {
     private cookieService: CookieService,
     public navService: NavService,
     public UserService: UserService) {
-    this.cookieService.set('authenticated', 'false');
+    this.checkAuthenticationStatus();
+  }
+
+  checkAuthenticationStatus(): void {
+    const isAuthenticated = this.cookieService.get('authenticated') === 'true';
+    if (isAuthenticated) {
+      const userId = this.cookieService.get('userId');
+      const firstName = this.cookieService.get('firstName');
+      const lastName = this.cookieService.get('lastName');
+      this.UserService.setCookieData(userId, firstName, lastName);
+      this.navService.show();
+    }
   }
 
   async createAndLogin(user: User, endpoint: string): Promise<string> {
@@ -41,10 +52,10 @@ export class AuthenticationService {
         this.router.navigate(['/home']);
         return 'success';
       } else {
-        return result['message']
+        return result['message'];
       }
     } catch (err) {
-      throw err;
+      return err['error']['message'];
     }
   }
   

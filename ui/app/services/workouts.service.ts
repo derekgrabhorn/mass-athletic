@@ -37,6 +37,8 @@ export class WorkoutsService {
   }
 
   getAllExercises() {
-    return this.http.post('/api/stats/getExercises', {});
+    return this.http.post('/api/stats/getExercises', {
+      userId: this.cookieService.get('userId')
+    });
   }
 }

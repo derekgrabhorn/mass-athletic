@@ -12,7 +12,7 @@ dotenv.config();
 const db: Database = Database.getInstance();
 
 router.post('/getAll', (req: Request, res: Response) => {
-    return stats.getAll(req, res, db.workoutCollection);
+    return stats.getAll(req, res, db.workoutCollection, db.muscleGroupsCollection, db.musclesCollection);
 });
 
 router.post('/getExercises', (req: Request, res: Response) => {
