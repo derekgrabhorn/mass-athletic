@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class NavService {
   isVisible: boolean;
+  isSettingsAccessed: boolean = false;
 
   constructor() { this.isVisible = false; }
 
@@ -14,9 +15,5 @@ export class NavService {
 
   show() {
     this.isVisible = true;
-  }
-
-  toggle() {
-    this.isVisible = !this.isVisible;
   }
 }

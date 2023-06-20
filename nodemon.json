@@ -1,4 +1,7 @@
 {
-    "ext": "ts",
-    "exec": "ts-node -r tsconfig-paths/register ./src --env=development"
-}
+    "watch": ["server"],
+    "ext": ".ts,.tsx,.js",
+    "exec": "npx tsx server/server.ts",
+    "ignore": ["server/**/*.spec.ts"]
+  }
+  

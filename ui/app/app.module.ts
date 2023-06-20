@@ -10,7 +10,7 @@ import { AppRoutingModule, routingComponents, ROUTING } from 'ui/app/app-routing
 import { AppComponent } from 'ui/app/app.component';
 import { ChartsModule, ThemeService } from 'ng2-charts';
 
-import { CommonService } from "ui/app/services/common.service";
+import { UserService } from "ui/app/services/user.service";
 import { NavComponent } from './components/nav/nav.component';
 import { AuthenticationService } from './services/authentication.service';
 import { AuthGuardService } from './services/auth-guard.service';
@@ -39,7 +39,7 @@ import { NewWorkoutComponent } from './components/new-workout/new-workout.compon
   providers: [
     ThemeService,
     CookieService,
-    CommonService,
+    UserService,
     AuthenticationService,
     AuthGuardService
   ],

@@ -1,6 +1,6 @@
 export class Statistics {
 
-    getAll(req, res, collection) {
+    getAll(req, res, collection, muscleGroupsCollection, musclesCollection) {
         const today: Date = new Date();
         const ninetyDaysAgo = new Date(today);
         ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
@@ -8,8 +8,9 @@ export class Statistics {
         try {
             collection.find({ userId: req.body.userId })
             .toArray()
-            .then((result) => {
+            .then(async (result) => {
                 let groupsData: any = {};
+                const ormExercises = ['Bench Press', 'Squat', 'Deadlift'];
                 let oneRepMaxData: any = {
                     'Bench Press': {},
                     'Deadlift': {},
@@ -18,19 +19,15 @@ export class Statistics {
                 let totalWorkouts: number = 0;
                 let totalDuration: number = 0;
                 let workoutsIn90Days: number = 0;
-                let months = req.body.ormTimeframe;
-                let ormMonthsData: any = {};
     
                 //Format and fill ORM history months object
-                for (let i = 0; i < months.length; i++) {
-                    ormMonthsData[months[i]] = {};
-                    ormMonthsData[months[i]].start = Date.parse(months[i]);
-                    if (months[i+1]) {
-                        ormMonthsData[months[i]].end = Date.parse(months[i+1]) - 1;
-                    } else {
-                        ormMonthsData[months[i]].end = today;
-                    }
-                }
+                let ormMonthsData = await this.processORMMonthsData({}, req.body.ormTimeframe, today);
+
+                //Get array of 'Muscle Groups'
+                const muscleGroups = await this.getAllResultNames(muscleGroupsCollection);
+
+                // Get array of 'Muscle Names'
+                const muscleNames = await this.getAllResultNames(musclesCollection);
     
                 //Setting 'Muscle Groups by Use' data, total workouts
                 result.forEach((workout) => {
@@ -45,96 +42,19 @@ export class Statistics {
                         groupsData[exercise.muscleGroup] = (groupsData[exercise.muscleGroup]+1 || 1);
     
                         exercise.sets.forEach((set) => {
-                            if(set.oneRepMax === true && ['Bench Press', 'Deadlift', 'Squat'].includes(exercise.name)) {
+                            if(set.oneRepMax === true && ormExercises.includes(exercise.name)) {
                                 oneRepMaxData[exercise.name][Date.parse(workout.start)] = set.weight;
                             }
                         })
                     });
                   });
-    
-                  //Setting ORM data
-                  function getKeyByValue(object, value) {
-                    return Object.keys(object).find(key => object[key] === value);
-                  }
-    
-                  let benchORMs: number[] = Object.values(oneRepMaxData['Bench Press']);
-                  let maxBenchWeight: number = Math.max(...benchORMs);
-                  let maxBenchDate = getKeyByValue(oneRepMaxData['Bench Press'], maxBenchWeight);
-                  let maxBenchHistory = {};
-    
-                  let currentHigh;
-                  months.forEach((month) => {
-                    maxBenchHistory[month] = currentHigh || 0;
-    
-                    Object.keys(oneRepMaxData['Bench Press']).forEach((orm) => {
-                        if (orm > ormMonthsData[month].start && orm < ormMonthsData[month].end) {
-                            if (oneRepMaxData['Bench Press'][orm] > maxBenchHistory[month]) {
-                                maxBenchHistory[month] = oneRepMaxData['Bench Press'][orm];
-                                currentHigh = oneRepMaxData['Bench Press'][orm];
-                            }
-                        }
-                    });
+ 
+                  //Set data for each ORM exercise
+                  ormExercises.forEach((exercise) => {
+                    oneRepMaxData[exercise] = this.processOneRepMaxData(exercise, oneRepMaxData, req.body.ormTimeframe, ormMonthsData)
                   });
     
-                  let maxBenchData = {
-                      'BP_ORM_Date': maxBenchDate,
-                      'BP_ORM_Weight' : maxBenchWeight,
-                      'BP_ORM_History' : maxBenchHistory
-                  };
-    
-                  let squatORMs: number[] = Object.values(oneRepMaxData['Squat']);
-                  let maxSquatWeight = Math.max(...squatORMs);
-                  let maxSquatDate = getKeyByValue(oneRepMaxData['Squat'], maxSquatWeight);
-                  let maxSquatHistory = {};
-    
-                  //add logic where if the first month is zero it finds the first ORM before that...
-    
-                  currentHigh = 0;
-                  months.forEach((month) => {
-                    maxSquatHistory[month] = currentHigh || 0;
-    
-                    Object.keys(oneRepMaxData['Squat']).forEach((orm) => {
-                        if (orm > ormMonthsData[month].start && orm < ormMonthsData[month].end) {
-                            if (oneRepMaxData['Squat'][orm] > maxSquatHistory[month]) {
-                                maxSquatHistory[month] = oneRepMaxData['Squat'][orm];
-                                currentHigh = oneRepMaxData['Squat'][orm];
-                            }
-                        }
-                    });
-                  });
-    
-                  let maxSquatData = {
-                      'SQ_ORM_Date': maxSquatDate,
-                      'SQ_ORM_Weight': maxSquatWeight,
-                      'SQ_ORM_History': maxSquatHistory
-                  };
-    
-                  let deadliftORM: number[] = Object.values(oneRepMaxData['Deadlift']);
-                  let maxDeadliftWeight = Math.max(...deadliftORM);
-                  let maxDeadliftDate = getKeyByValue(oneRepMaxData['Deadlift'], maxDeadliftWeight);
-                  let maxDeadliftHistory = {};
-    
-                  currentHigh = 0;
-                  months.forEach((month) => {
-                    maxDeadliftHistory[month] = currentHigh || 0;
-    
-                    Object.keys(oneRepMaxData['Deadlift']).forEach((orm) => {
-                        if (orm > ormMonthsData[month].start && orm < ormMonthsData[month].end) {
-                            if (oneRepMaxData['Deadlift'][orm] > maxDeadliftHistory[month]) {
-                                maxDeadliftHistory[month] = oneRepMaxData['Deadlift'][orm];
-                                currentHigh = oneRepMaxData['Deadlift'][orm];
-                            }
-                        }
-                    });
-                  });
-    
-                  let maxDeadliftData = {
-                      'DL_ORM_Date': maxDeadliftDate,
-                      'DL_ORM_Weight': maxDeadliftWeight,
-                      'DL_ORM_History': maxDeadliftHistory
-                  };
-    
-                  //Setting averages
+                  //Set averages
                   let averageDurationData = totalDuration/totalWorkouts;
                   let workoutsPerWeekData = workoutsIn90Days / 12.857;
                 
@@ -144,11 +64,10 @@ export class Statistics {
                       totalTime: totalDuration,
                       averageDuration: averageDurationData,
                       workoutsPerWeek: workoutsPerWeekData,
+                      muscleGroups: muscleGroups,
+                      muscleNames: muscleNames,
                       groupsByUse: groupsData,
-                      oneRepMax: oneRepMaxData,
-                      maxBench: maxBenchData,
-                      maxSquat: maxSquatData,
-                      maxDeadlift: maxDeadliftData
+                      oneRepMax: oneRepMaxData
                   });
             })
         } catch (err) {
@@ -157,6 +76,58 @@ export class Statistics {
                 message: `Failed to retrieve statistics: ${err}`,
             })
         }
+    }
+
+    // Return all muscle groups in an array: ['CHEST', 'LEGS', 'ARMS'...]
+    async getAllResultNames(collection) {
+        return collection.find()
+        .toArray()
+        .then((result) => result.map(item => item.name));
+    }
+
+    getKeyByValue(object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+    }
+
+    async processORMMonthsData(dataObject, months, today) {
+        for (let i = 0; i < months.length; i++) {
+            dataObject[months[i]] = {};
+            dataObject[months[i]].start = Date.parse(months[i]);
+            if (months[i+1]) {
+                dataObject[months[i]].end = Date.parse(months[i+1]) - 1;
+            } else {
+                dataObject[months[i]].end = today;
+            }
+        }
+
+        return dataObject;
+    }
+
+    processOneRepMaxData(exercise, oneRepMaxData, months, ormMonthsData) {
+        let exerciseORM: number[] = Object.values(oneRepMaxData[exercise]);
+        let maxORMWeight: number = Math.max(...exerciseORM);
+        let maxORMDate = this.getKeyByValue(oneRepMaxData[exercise], maxORMWeight);
+        let maxORMHistory = {};
+
+        let currentHigh;
+        months.forEach((month) => {
+            maxORMHistory[month] = currentHigh || 0;
+
+          Object.keys(oneRepMaxData[exercise]).forEach((orm) => {
+              if (orm > ormMonthsData[month].start && orm < ormMonthsData[month].end) {
+                  if (oneRepMaxData[exercise][orm] > maxORMHistory[month]) {
+                    maxORMHistory[month] = oneRepMaxData[exercise][orm];
+                      currentHigh = oneRepMaxData[exercise][orm];
+                  }
+              }
+          });
+        });
+
+        return {
+            'ORM_Date': maxORMDate,
+            'ORM_Weight' : maxORMWeight,
+            'ORM_History' : maxORMHistory
+        };
     }
 
     stats(req, res, collection) {
@@ -189,7 +160,8 @@ export class Statistics {
     }
 
     getExercises(req, res, collection) {
-        collection.find({}).toArray((err, result) => {
+        collection.find({ userId: req.body.userId })
+        .toArray((err, result) => {
             if (err) {
                 console.log(`Error returning exercises: ${err}`);
             } else {

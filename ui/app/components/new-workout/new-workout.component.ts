@@ -35,7 +35,10 @@ export class NewWorkoutComponent implements OnInit {
     exercises: []
   };
 
-  constructor(private cookieService: CookieService, private workoutsService: WorkoutsService, private router: Router) {}
+  constructor(
+    private cookieService: CookieService, 
+    private workoutsService: WorkoutsService, 
+    private router: Router) { }
 
   ngOnInit() {
     this._timerSubscription = timer(0,1000).subscribe(elapsed => {

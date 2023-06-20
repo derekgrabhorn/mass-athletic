@@ -21,10 +21,9 @@ export class MyWorkoutsComponent implements OnInit {
   activeExercise;
   modalStatus: Boolean;
 
-  constructor(private workoutService: WorkoutsService,
-              private cookieService: CookieService
-    ) { 
-  }
+  constructor(
+    private workoutService: WorkoutsService,
+    private cookieService: CookieService) { }
 
   ngOnInit() {
     this.workoutService.getAllWorkouts().subscribe(result => {

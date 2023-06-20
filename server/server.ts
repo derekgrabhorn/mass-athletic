@@ -8,10 +8,6 @@ import APIRouter from './routes/api';
 dotenv.config();
 var app = express();
 
-app.listen(process.env.PORT, () => {
-    console.log(`Listening at PORT ${process.env.PORT}`);
-});
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((use, res, next) => {
@@ -20,9 +16,14 @@ app.use((use, res, next) => {
     res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     next();
 });
-
 //Routes
-app.use('/api', APIRouter);
+app.use('/api', (req, res, next) => {
+    next();
+}, APIRouter);
+
+app.listen(process.env.PORT, () => {
+    console.log(`Listening at PORT ${process.env.PORT}`);
+});
 
 //Export express Instance
 export default app;
